@@ -166,11 +166,13 @@ def digitalColonyHelper(generations: int, colony: str) -> int:
 # ------------------------------------------------------------------------------------
 @app.route('/chinese-wall', methods=['POST'])
 def chineseWall():
-    response = {"1" : "Fluffy",
-            "2" : "Galactic",
-            "3" : "mangoes",
-            "4" : "Subatomic",
-            "5" : "Jellyfish"}
+    response = {
+                "1": "Fluffy",
+                "2": "Galactic",
+                "3": "mangoes",
+                "4": "Subatomic",
+                "5": "Jellyfish"
+                }
 
     return jsonify(response)
 #end of Chinese Wall
