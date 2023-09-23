@@ -106,7 +106,6 @@ def greedyMonkey(maxW: int, maxV: int, f: List[List[int]]) -> int:
     for items in f:
         temp_result = []
         for possible in possibilities:
-            print(possibilities)
             newWeight = possible[0] + items[0]
             newVolume = possible[1] + items[1] 
             newValue = possible[2] + items[2] 
