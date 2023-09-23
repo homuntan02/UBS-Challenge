@@ -116,6 +116,43 @@ def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
 
     return dp[n][maxW][maxV];
 
+#end of Greedy Monkey
+# ------------------------------------------------------------------------------------
+@app.route('/digital-colony', methods=['POST'])
+def digitalColony():
+    data = request.get_json()
+    responses = []
+
+    for entry in data:
+        generations = entry['generations']
+        colony = entry['colony']
+        result = digitalColony(generations, colony)
+        responses.append(result)
+
+    return jsonify(responses)
+
+def digitalColony(generations: int, colony: str) -> int:
+    while generations > -1:
+        colonySize = len(colony)
+        weight = sum(map(int, colony))
+        weight_last = weight % 10
+        j = 1
+        first = int(colony[0])
+        second = int(colony[1])
+        newColony = [colony[0]]
+
+        while j < colonySize:
+            second = int(colony[j])
+            difference = first - second if first > second else 10 - (second - first)
+            new = (weight_last + difference) % 10
+            newColony.extend([str(new), str(second)])
+            first = second
+            j += 1
+
+        generations -= 1
+        colony = "".join(newColony)
+
+    return str(weight)
     
 logger = logging.getLogger()
 handler = logging.StreamHandler()
