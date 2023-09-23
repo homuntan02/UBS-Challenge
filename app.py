@@ -74,6 +74,48 @@ def getNextProbableWords(classes: List[Dict], statements: List[str]) -> Dict[str
             results[statement] = variable_names[:5]
 
     return results
+
+# end of first challenge
+# ------------------------------------------------------------------------------------
+
+@app.route('/greedymonkey', methods=['POST'])
+def greedyMonkey():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        if 'w' in data and 'v' in data and 'f' in data:
+            maxW = data['w']
+            maxV = data['v']
+            f = data['f']
+
+            result = greedyMonkey(maxW, maxV, f)
+            responseText = str(result)
+
+            return jsonify(responseText), 200
+        else:
+            return jsonify({"error": "Invalid JSON payload"}), 400
+
+    except Exception as e:
+        logger.error(f"Error processing JSON payload: {str(e)}")
+        return jsonify({"error": "Error processing JSON payload"}), 500
+    
+def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
+    n = len(f)
+    dp = [[[0 for _ in range(maxW + 1)] for _ in range(maxV + 1)] for _ in range(n + 1)]
+
+
+    for i in range(1, n + 1):
+        for w in range(maxW + 1):
+            for v in range(maxV + 1):
+                if f[i - 1][0] <= w and f[i - 1][1] <= v:
+                    dp[i][w][v] = max(dp[i - 1][w][v],
+                                     dp[i - 1][w - f[i - 1][0]][v - f[i-1][1]] + f[i - 1][2])
+                else:
+                    dp[i][w][v] = dp[i - 1][w][v]
+
+    return dp[n][maxW][maxV];
+
     
 logger = logging.getLogger()
 handler = logging.StreamHandler()
