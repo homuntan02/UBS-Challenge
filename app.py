@@ -126,12 +126,12 @@ def digitalColony():
     for entry in data:
         generations = entry['generations']
         colony = entry['colony']
-        result = digitalColony(generations, colony)
+        result = digitalColonyHelper(generations, colony)
         responses.append(result)
 
     return jsonify(responses)
 
-def digitalColony(generations: int, colony: str) -> int:
+def digitalColonyHelper(generations: int, colony: str) -> int:
     while generations > -1:
         colonySize = len(colony)
         weight = sum(map(int, colony))
@@ -139,18 +139,19 @@ def digitalColony(generations: int, colony: str) -> int:
         j = 1
         first = int(colony[0])
         second = int(colony[1])
-        newColony = [colony[0]]
+        newColony = colony[0];
 
         while j < colonySize:
             second = int(colony[j])
             difference = first - second if first > second else 10 - (second - first)
             new = (weight_last + difference) % 10
-            newColony.extend([str(new), str(second)])
+            newColony += str(new);
+            newColony += str(second);
             first = second
             j += 1
 
         generations -= 1
-        colony = "".join(newColony)
+        colony = newColony
 
     return str(weight)
     
