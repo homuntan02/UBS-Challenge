@@ -101,20 +101,25 @@ def greedyMonkey():
         return jsonify({"error": "Error processing JSON payload"}), 500
     
 def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
-    n = len(f)
-    dp = [[[0 for _ in range(maxV + 1)] for _ in range(maxW + 1)] for _ in range(n + 1)]
+    possibilities = [[0,0,0]]
+    for items in f:
+        result = []
+        for possible in possibilities:
+            newWeight = possible[0] + items[0]
+            newVolume = possible[1] + items[1] 
+            newValue = possible[2] + items[2] 
+            if newWeight <= maxW and newVolume <=maxV:
+              result.append([newWeight, newVolume, newValue]);
 
+        possibilities.append(result)
 
-    for i in range(1, n + 1):
-        for w in range(maxW + 1):
-            for v in range(maxV + 1):
-                if f[i - 1][0] <= w and f[i - 1][1] <= v:
-                    dp[i][w][v] = max(dp[i - 1][w][v],
-                                     dp[i - 1][w - f[i - 1][0]][v - f[i-1][1]] + f[i - 1][2])
-                else:
-                    dp[i][w][v] = dp[i - 1][w][v]
+    max = 0
+    for items in possibilities:
+        val = items[2]
+        if val > max:
+            max = val
 
-    return dp[n][maxW][maxV];
+    return max
 
 #end of Greedy Monkey
 # ------------------------------------------------------------------------------------
