@@ -92,13 +92,13 @@ def greedyMonkey():
             result = greedyMonkey(maxW, maxV, f)
             responseText = str(result)
 
-            return jsonify(responseText), 200
+            return responseText, 200
         else:
-            return jsonify({"error": "Invalid JSON payload"}), 400
+            return "Invalid JSON payload", 400
 
     except Exception as e:
         logger.error(f"Error processing JSON payload: {str(e)}")
-        return jsonify({"error": "Error processing JSON payload"}), 500
+        return "Error processing JSON payload", 500
     
 def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
     possibilities = [[0,0,0]]
