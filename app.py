@@ -103,23 +103,26 @@ def greedyMonkey():
 def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
     possibilities = [[0,0,0]]
     for items in f:
-        result = []
+        temp_result = []
+        print(possibilities)
         for possible in possibilities:
             newWeight = possible[0] + items[0]
             newVolume = possible[1] + items[1] 
             newValue = possible[2] + items[2] 
             if newWeight <= maxW and newVolume <=maxV:
-              result.append([newWeight, newVolume, newValue]);
+              temp_result.append([newWeight, newVolume, newValue]);
 
-        possibilities.append(result)
+        if temp_result:
+          possibilities.append(temp_result)
 
-    max = 0
+    max_val = 0
     for items in possibilities:
         val = items[2]
-        if val > max:
-            max = val
+        if val > max_val:
+            max_val = val
 
-    return max
+    return max_val
+
 
 #end of Greedy Monkey
 # ------------------------------------------------------------------------------------
