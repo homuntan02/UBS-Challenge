@@ -164,7 +164,7 @@ def digitalColonyHelper(generations: int, colony: str) -> int:
 
 #end of digitalColony
 # ------------------------------------------------------------------------------------
-@app.route('/chinese-wall', methods=['POST'])
+@app.route('/chinese-wall', methods=['GET'])
 def chineseWall():
     response = {
                 "1": "Fluffy",
