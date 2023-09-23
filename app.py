@@ -4,6 +4,7 @@ import json
 
 from routes import app
 from flask import Flask, request, jsonify
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
 
