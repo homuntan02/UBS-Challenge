@@ -100,26 +100,26 @@ def greedyMonkey():
         logger.error(f"Error processing JSON payload: {str(e)}")
         return "Error processing JSON payload", 500
     
-def greedyMonkey(maxW: int, maxV: int, f:List[List[int]]) -> int:
-    possibilities = [[0,0,0]]
+def greedyMonkey(maxW: int, maxV: int, f: List[List[int]]) -> int:
+    possibilities = [[0, 0, 0]]
+    
     for items in f:
         temp_result = []
-        print(possibilities)
         for possible in possibilities:
+            print(possibilities)
             newWeight = possible[0] + items[0]
             newVolume = possible[1] + items[1] 
             newValue = possible[2] + items[2] 
-            if newWeight <= maxW and newVolume <=maxV:
-              temp_result.append([newWeight, newVolume, newValue]);
+            if newWeight <= maxW and newVolume <= maxV:
+                temp_result.append([newWeight, newVolume, newValue])
 
-        if temp_result:
-          possibilities.append(temp_result)
+        possibilities.extend(temp_result)
 
     max_val = 0
     for items in possibilities:
         val = items[2]
-        if val > max_val:
-            max_val = val
+        if val > max_val:  
+            max_val = val  
 
     return max_val
 
