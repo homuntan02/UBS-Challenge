@@ -161,6 +161,20 @@ def digitalColonyHelper(generations: int, colony: str) -> int:
         colony = newColony
 
     return weight
+
+#end of digitalColony
+# ------------------------------------------------------------------------------------
+@app.route('/chinese-wall', methods=['POST'])
+def chineseWall():
+    response = {"1" : "Fluffy",
+            "2" : "Galactic",
+            "3" : "mangoes",
+            "4" : "Subatomic",
+            "5" : "Jellyfish"}
+
+    return jsonify(response)
+#end of Chinese Wall
+# ------------------------------------------------------------------------------------
     
 logger = logging.getLogger()
 handler = logging.StreamHandler()
