@@ -79,7 +79,7 @@ def getNextProbableWords(classes: List[Dict], statements: List[str]) -> Dict[str
 # ------------------------------------------------------------------------------------
 
 @app.route('/greedymonkey', methods=['POST'])
-def greedyMonkey():
+def greedyonkey():
     try:
         # Get the JSON data from the request
         data = request.get_json()
@@ -134,7 +134,7 @@ def digitalColony():
         generations = entry['generations']
         colony = entry['colony']
         result = digitalColonyHelper(generations, colony)
-        responses.append(result)
+        responses.append(str(result))
 
     return jsonify(responses)
 
@@ -160,7 +160,7 @@ def digitalColonyHelper(generations: int, colony: str) -> int:
         generations -= 1
         colony = newColony
 
-    return str(weight)
+    return weight
     
 logger = logging.getLogger()
 handler = logging.StreamHandler()
