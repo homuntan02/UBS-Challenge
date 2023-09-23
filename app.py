@@ -26,8 +26,7 @@ def lazy_developer():
 
             results = getNextProbableWords(classes, statements)
 
-            response = {"status": "success", "message": message}
-            return jsonify(response), 200
+            return jsonify(results), 200
         else:
             return jsonify({"error": "Invalid JSON payload"}), 400
 
