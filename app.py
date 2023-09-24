@@ -255,6 +255,75 @@ def countRailwayCombinations(input_data: List[str]) -> List[int]:
     combinations = countCombinations(lengthOfRailway, trackPieceLengths)
     return combinations
 
+@app.route('/parking-lot', methods=['POST'])
+def parking_lot():
+    try:
+        # Get the JSON data from the request
+        input = request.get_json()
+        result = calculate_parking_profits(input)
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        logger.error(f"Error processing JSON payload: {str(e)}")
+        return jsonify({"error": "Error processing JSON payload"}), 500  
+    
+def calculate_parking_profits(input_data):
+    bus_slots = input_data["BusParkingSlots"]
+    car_slots = input_data["CarParkingSlots"]
+    parking_charges = input_data["ParkingCharges"]
+    buses = input_data["Buses"]
+    cars = input_data["Cars"]
+    bikes = input_data["Bikes"]
+
+    possible_slots = [[bus_slots, car_slots, 0]]
+
+    temp = []
+    for possible in possible_slots:
+        for i in range(possible[0] + 1):
+            if(i == 0):
+                continue
+            temp.append([possible[0] - i, possible[1] + 2 * i, possible[2] + 2 * i])
+            temp.append([possible[0] - i, possible[1] + 1 * i, possible[2] + 7 * i])
+            temp.append([possible[0] - i, possible[1] + 1 * i, possible[2] + 12 * i])
+    possible_slots.extend(temp)
+
+    temp = []
+    for possible in possible_slots:
+        for i in range(possible[1] + 1):
+            if(i == 0):
+                continue
+            temp.append([possible[0], possible[1] - i, possible[2] + 5 * i])
+    possible_slots.extend(temp)
+
+    def calculate_profit(allocation, buses, cars, bikes):
+        return (min(allocation[0], buses) * parking_charges["Bus"] +
+                min(allocation[1], cars) * parking_charges["Car"] +
+                min (allocation[2], bikes) * parking_charges["Bike"])
+    
+    best_allocation = [0,0,0] 
+    best_allocation_profit = 0
+    for possible in possible_slots:
+        temp_profit = calculate_profit(possible, buses, cars, bikes)
+        if temp_profit > best_allocation_profit:
+            best_allocation = possible
+            best_allocation_profit = temp_profit
+
+    
+    bus_rejections = buses - best_allocation[0]
+    car_rejections = cars - best_allocation[1]
+    bike_rejections = bikes - best_allocation[2]
+
+
+    result = {
+        "Profit": best_allocation_profit,
+        "BusRejections": bus_rejections,
+        "CarRejections": car_rejections,
+        "BikeRejections": bike_rejections
+    }
+
+    return {"Answer": result}
+
 logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
