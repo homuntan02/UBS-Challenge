@@ -177,7 +177,45 @@ def chineseWall():
     return jsonify(response)
 #end of Chinese Wall
 # ------------------------------------------------------------------------------------
+@app.route('/calendar-scheduling', methods=['POST'])
+def calendar_scheduling():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        results = calenderScheduling(data)
+
+        return jsonify(results), 200
+
+    except Exception as e:
+        logger.error(f"Error processing JSON payload: {str(e)}")
+        return jsonify({"error": "Error processing JSON payload"}), 500  
+      
+def calenderScheduling(lessonRequests: List[dict]) -> dict:
+    days_of_week = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    hours_per_day = 12
+    schedule = {day: [] for day in days_of_week}
+    lessonRequests.sort(key=lambda x: (-x["potentialEarnings"], x["duration"]))
+
+    def can_fit(lesson, day):
+        result = sum([x["duration"] for x in schedule[day]])
+        result +=lesson["duration"] 
+        return result<= hours_per_day
     
+    for lesson in lessonRequests:
+        for day in lesson["availableDays"]:
+            if can_fit(lesson, day):
+                schedule[day].append(lesson)
+                break
+    
+    temp_schedule = {day: [] for day in days_of_week} 
+    for day in days_of_week:
+        for lesson in schedule[day]:
+            temp_schedule[day].append(lesson["lessonRequestId"])
+        
+    output_schedule = {day: sorted(lessons) for day, lessons in temp_schedule.items()}
+    
+    return output_schedule
 logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
