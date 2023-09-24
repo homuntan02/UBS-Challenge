@@ -216,6 +216,45 @@ def calenderScheduling(lessonRequests: List[dict]) -> dict:
     output_schedule = {day: sorted(lessons) for day, lessons in temp_schedule.items()}
     
     return output_schedule
+
+#end of calender scheduling
+# ------------------------------------------------------------------------------------
+@app.route('/railway-builder', methods=['POST'])
+def railway_builder():
+    try:
+        # Get the JSON data from the request
+        inputs = request.get_json()
+        result = []
+        for input in inputs:
+            result.append(countRailwayCombinations(input))
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        logger.error(f"Error processing JSON payload: {str(e)}")
+        return jsonify({"error": "Error processing JSON payload"}), 500  
+    
+def countRailwayCombinations(input_data: List[str]) -> List[int]:
+    def countCombinations(lengthOfRailway, trackPieceLengths):
+        dp = [0] * (lengthOfRailway + 1)
+        dp[0] = 1  
+
+        for pieceLength in trackPieceLengths:
+            for i in range(pieceLength, lengthOfRailway + 1):
+                dp[i] += dp[i - pieceLength]
+
+        return dp[lengthOfRailway]
+
+
+    parts = input_data.split(", ")
+    print(parts)
+    lengthOfRailway = int(parts[0])
+    numberOfTypesOfTrackPiece = int(parts[1])
+    trackPieceLengths = list(map(int, parts[2:]))
+
+    combinations = countCombinations(lengthOfRailway, trackPieceLengths)
+    return combinations
+
 logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
