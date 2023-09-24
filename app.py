@@ -171,7 +171,7 @@ def chineseWall():
                 "2": "Galactic",
                 "3": "Mangoes",
                 "4": "Subatomic",
-                "5": "Jellyfish"
+                "5": "Monkey"
                 }
 
     return jsonify(response)
