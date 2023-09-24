@@ -169,7 +169,7 @@ def chineseWall():
     response = {
                 "1": "Fluffy",
                 "2": "Galactic",
-                "3": "mangoes",
+                "3": "Mangoes",
                 "4": "Subatomic",
                 "5": "Jellyfish"
                 }
